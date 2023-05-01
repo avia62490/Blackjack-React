@@ -9,15 +9,19 @@ function App() {
 
   function dealCards() {
     console.log("dealing cards");
-    const card = sleeve.shift();
-    setSleeve([...sleeve]);
-    setPlayerHand([...playerHand, card]);
-    console.log(card);
-    console.log(typeof sleeve);
-  }
-  useEffect(() => {
-    setSleeve(Deck)
-  }, [])
+    for(let i = 0; i < 2; i++) {
+      let card = sleeve.shift();
+      setSleeve([...sleeve]);
+      setPlayerHand(prevPlayerHand => [...prevPlayerHand, card])
+      let dealerCard = sleeve.shift();
+      setSleeve([...sleeve]);
+      setDealerHand(prevDealerHand => [...prevDealerHand, dealerCard]);
+    }
+    console.log(sleeve.length);
+  };
+
+  useEffect(() => setSleeve(Deck), []);
+
   return (
     <div className="App">
       <p>Deck</p>
