@@ -26,17 +26,23 @@ function App() {
     console.log(sleeve.length);
   };
 
+// find total score of hand
   useEffect(() => {
+    let isAcePresent = false
     const result = playerHand.map((element) => {
       if(Number.isInteger(Number(element[0]))) {
         return Number(element[0]);
+      } else if (element[0] === "A" && isAcePresent) {
+        return 1
       } else if(element[0] === "A") {
+        isAcePresent = true
         return 11;
       } else {
         return 10;
       }
     }).reduce((total, current) => total + current, 0)
-    console.log(result)
+    // console.log("Score is " + result)
+    setPLayerScore(result)
   }, [playerHand, playerScore])
 
   // Player hits, gets a card from sleeve
@@ -55,6 +61,8 @@ function App() {
       <button onClick={dealCards}>Deal</button>
       <p>PLayer</p>
       {playerHand}
+      <br></br>
+      Score: {playerScore}
       <br></br>
       <button onClick={playerHit}>Hit</button>
 
