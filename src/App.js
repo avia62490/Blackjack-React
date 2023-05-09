@@ -66,6 +66,15 @@ function App() {
     setDealerScore(result)
   }, [dealerHand, dealerScore])
 
+  useEffect(() => {
+    if(isDealerTurn && dealerScore < 17) {
+      console.log('dealer hits')
+      let card = sleeve.shift();
+      setSleeve([...sleeve]);
+      setDealerHand(prevDealerHand => [...prevDealerHand, card])
+    }
+  }, [isDealerTurn])
+
   // Player hits, gets a card from sleeve
   function playerHit() {
     console.log('player hits')
