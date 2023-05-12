@@ -25,7 +25,8 @@ function App() {
       setSleeve([...sleeve]);
       setDealerHand(prevDealerHand => [...prevDealerHand, dealerCard]);
     }
-    console.log(sleeve.length);
+    console.log(playerHand);
+    console.log(dealerHand);
   };
 
 // find total score for Player
@@ -81,6 +82,7 @@ function App() {
     let card = sleeve.shift();
     setSleeve([...sleeve]);
     setPlayerHand(prevPlayerHand => [...prevPlayerHand, card])
+    console.log(playerHand)
   }
 
   function playerStay() {
@@ -91,11 +93,11 @@ function App() {
   return (
     <div className="App">
       <p>Deck</p>
-      {sleeve}
+      {/* {sleeve} */}
       <br></br>
       <button onClick={dealCards}>Deal</button>
       <p>PLayer</p>
-      {playerHand}
+      {/* {playerHand} */}
       <br></br>
       Score: {playerScore}
       <br></br>
@@ -103,7 +105,7 @@ function App() {
       <button onClick={playerStay}>Stay</button>
 
       <p>Dealer</p>
-      {dealerHand}
+      {/* {dealerHand} */}
       Score: {dealerScore}
     </div>
   );
