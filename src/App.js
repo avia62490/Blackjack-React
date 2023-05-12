@@ -1,5 +1,6 @@
 import './App.css';
 import Deck from './Deck';
+import Card from './Card'
 import { useState, useEffect } from 'react';
 
 function App() {
@@ -11,7 +12,10 @@ function App() {
   const [isDealerTurn, setIsDealerTurn] = useState(false)
 
   // import deck component and set the sleeve to a randomly shuffled set of cards
-  useEffect(() => setSleeve(Deck), []);
+  useEffect(() => {
+    setSleeve(Deck);
+    console.log(Deck)
+    }, []);
 
   // Initial dealing, 2 cards for Player and Dealer
   function dealCards() {
@@ -28,6 +32,18 @@ function App() {
     console.log(playerHand);
     console.log(dealerHand);
   };
+
+  // use card component to for displaying 'cards' on page, pass in sleeve, playerHand, or 
+  // dealerHand as argument, takes up space on page but won't need to later on
+  function cardDisplay(setOfCards) {
+    const display = setOfCards.map(card => {
+      return (
+        <Card
+        rank={card.rank}
+        suit={card.suit} />
+      )})
+      return display
+    }
 
 // find total score for Player
   useEffect(() => {
@@ -74,7 +90,8 @@ function App() {
       setSleeve([...sleeve]);
       setDealerHand(prevDealerHand => [...prevDealerHand, card])
     }
-  }, [isDealerTurn])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isDealerTurn, dealerScore])
 
   // Player hits, gets a card from sleeve
   function playerHit() {
@@ -93,11 +110,11 @@ function App() {
   return (
     <div className="App">
       <p>Deck</p>
-      {/* {sleeve} */}
+      {cardDisplay(sleeve)}
       <br></br>
       <button onClick={dealCards}>Deal</button>
       <p>PLayer</p>
-      {/* {playerHand} */}
+      {cardDisplay(playerHand)}
       <br></br>
       Score: {playerScore}
       <br></br>
@@ -105,7 +122,7 @@ function App() {
       <button onClick={playerStay}>Stay</button>
 
       <p>Dealer</p>
-      {/* {dealerHand} */}
+      {cardDisplay(dealerHand)}
       Score: {dealerScore}
     </div>
   );

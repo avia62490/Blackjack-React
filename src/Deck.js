@@ -17,7 +17,8 @@ const deck = [
   {rank: 3, suit: 'Hearts'} , {rank: 3, suit: 'Clubs'} , {rank: 3, suit: 'Diamonds'} , {rank: 3, suit: 'Spades'} ,
   {rank: 2, suit: 'Hearts'} , {rank: 2, suit: 'Clubs'} , {rank: 2, suit: 'Diamonds'} , {rank: 2, suit: 'Spades'}
 ];
-const sleeve = [...deck, ...deck, ...deck];
+// const sleeve = [...deck, ...deck, ...deck];
+const sleeve = deck ;
 const shuffledSleeve = lodash.shuffle(sleeve);
 
 export default shuffledSleeve
