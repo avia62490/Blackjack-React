@@ -7,7 +7,7 @@ function App() {
   const [sleeve, setSleeve] = useState([]);
   const [playerHand, setPlayerHand] = useState([]);
   const [dealerHand, setDealerHand] = useState([]);
-  const [playerScore, setPLayerScore] = useState(0);
+  const [playerScore, setPlayerScore] = useState(0);
   const [dealerScore, setDealerScore] = useState(0);
   const [isDealerTurn, setIsDealerTurn] = useState(false)
 
@@ -47,21 +47,29 @@ function App() {
 
 // find total score for Player
   useEffect(() => {
-    let isAcePresent = false
-    const result = playerHand.map((element) => {
-      if(Number.isInteger(Number(element[0]))) {
-        return Number(element[0]);
-      } else if (element[0] === "A" && isAcePresent) {
-        return 1
-      } else if(element[0] === "A") {
-        isAcePresent = true
-        return 11;
+    const deferAces = [];
+    let score = 0;
+    const faceCard = /^(Jack|Queen|King)$/;
+    playerHand.forEach(card => {
+      if(card.rank === "Ace") {
+        deferAces.push('Ace');
+      } else if(faceCard.test(card.rank)) {
+        score += 10
       } else {
-        return 10;
+        score += card.rank
       }
-    }).reduce((total, current) => total + current, 0)
-    // console.log("Score is " + result)
-    setPLayerScore(result)
+    })
+    if(deferAces) {
+      deferAces.forEach(ace => {
+        if(score < 11) {
+          score += 11
+        }else{
+          score += 1
+        }
+      })
+    }
+    setPlayerScore(score)
+    console.log("adjusting score")
   }, [playerHand, playerScore])
 
 // find total score for Delaer
