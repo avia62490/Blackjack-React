@@ -45,7 +45,7 @@ function App() {
       return display
     }
 
-// find total score for Player
+// find total score for Player, accounts for aces being worth 1 or 11
   useEffect(() => {
     const deferAces = [];
     let score = 0;
@@ -69,26 +69,32 @@ function App() {
       })
     }
     setPlayerScore(score)
-    console.log("adjusting score")
   }, [playerHand, playerScore])
 
-// find total score for Delaer
+// find total score for Delaer, acounts for aces also
   useEffect(() => {
-    let isAcePresent = false
-    const result = dealerHand.map((element) => {
-      if(Number.isInteger(Number(element[0]))) {
-        return Number(element[0]);
-      } else if (element[0] === "A" && isAcePresent) {
-        return 1
-      } else if(element[0] === "A") {
-        isAcePresent = true
-        return 11;
+    const deferAces = [];
+    let score = 0;
+    const faceCard = /^(Jack|Queen|King)$/;
+    dealerHand.forEach(card => {
+      if(card.rank === "Ace") {
+        deferAces.push('Ace');
+      } else if(faceCard.test(card.rank)) {
+        score += 10
       } else {
-        return 10;
+        score += card.rank
       }
-    }).reduce((total, current) => total + current, 0)
-    // console.log("Score is " + result)
-    setDealerScore(result)
+    })
+    if(deferAces) {
+      deferAces.forEach(ace => {
+        if(score < 11) {
+          score += 11
+        }else{
+          score += 1
+        }
+      })
+    }
+    setDealerScore(score)
   }, [dealerHand, dealerScore])
 
   useEffect(() => {
