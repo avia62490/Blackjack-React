@@ -9,18 +9,28 @@ function App() {
   const [dealerHand, setDealerHand] = useState([]);
   const [playerScore, setPlayerScore] = useState(0);
   const [dealerScore, setDealerScore] = useState(0);
-  const [isDealerTurn, setIsDealerTurn] = useState(false)
+  const [isDealerTurn, setIsDealerTurn] = useState(false);
+  const [isRoundOver, setIsRoundOver] = useState(false);
 
   // import deck component and set the sleeve to a randomly shuffled set of cards
   useEffect(() => {
     setSleeve(Deck);
-    console.log(Deck)
+    // console.log(sleeve.length)
     }, []);
+
+  useEffect(() => {
+    if(sleeve.length <= 1) {
+      setSleeve(Deck);
+    }
+    }, [sleeve.length]);
 
   // Initial dealing, 2 cards for Player and Dealer
   function dealCards() {
     console.log("dealing cards");
     setIsDealerTurn(false)
+    setIsRoundOver(false)
+    setPlayerHand([])
+    setDealerHand([])
     for(let i = 0; i < 2; i++) {
       let card = sleeve.shift();
       setSleeve([...sleeve]);
@@ -29,8 +39,6 @@ function App() {
       setSleeve([...sleeve]);
       setDealerHand(prevDealerHand => [...prevDealerHand, dealerCard]);
     }
-    console.log(playerHand);
-    console.log(dealerHand);
   };
 
   // use card component to for displaying 'cards' on page, pass in sleeve, playerHand, or 
@@ -97,15 +105,34 @@ function App() {
     setDealerScore(score)
   }, [dealerHand, dealerScore])
 
-  useEffect(() => {
+// handles dealer's turn
+// *************************************************
+// RETURN HERE
+// *************************************************
+useEffect(() => {
     if(isDealerTurn && dealerScore < 17) {
       console.log('dealer hits')
       let card = sleeve.shift();
       setSleeve([...sleeve]);
       setDealerHand(prevDealerHand => [...prevDealerHand, card])
+    } else if(isDealerTurn && dealerScore <= 21) {
+      console.log('dealer stays')
+      setIsRoundOver(true);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isDealerTurn, dealerScore])
+
+  useEffect(() => {
+    if(isRoundOver) {
+      if(playerScore > dealerScore) {
+        console.log('player wins')
+      } else if(playerScore === dealerScore) {
+        console.log('push')
+      } else if(playerScore < dealerScore) {
+        console.log('dealer wins')
+      }
+    }
+  })
 
   // Player hits, gets a card from sleeve
   function playerHit() {
