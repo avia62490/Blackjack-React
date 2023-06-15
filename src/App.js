@@ -11,6 +11,9 @@ function App() {
   const [dealerScore, setDealerScore] = useState(0);
   const [isDealerTurn, setIsDealerTurn] = useState(false);
   const [isRoundOver, setIsRoundOver] = useState(false);
+  const [blackjack, setBlackjack] = useState(false)
+  const [playerBusted, setPlayerBusted] = useState(false)
+  const [dealerBusted, setDealerBusted] = useState(false)
 
   // import deck component and set the sleeve to a randomly shuffled set of cards
   useEffect(() => {
@@ -19,7 +22,7 @@ function App() {
     }, []);
 
   useEffect(() => {
-    if(sleeve.length <= 1) {
+    if(sleeve.length <= 3) {
       setSleeve(Deck);
     }
     }, [sleeve.length]);
@@ -27,10 +30,15 @@ function App() {
   // Initial dealing, 2 cards for Player and Dealer
   function dealCards() {
     console.log("dealing cards");
-    setIsDealerTurn(false)
-    setIsRoundOver(false)
-    setPlayerHand([])
-    setDealerHand([])
+    //Currently does not reset busted states after re-dealing, have to redeal twice to revert to flase states
+    setIsDealerTurn(false);
+    setIsRoundOver(false);
+    setPlayerHand([]);
+    setDealerHand([]);
+    setPlayerBusted(false);
+    setDealerBusted(false);
+    setBlackjack(false);
+
     for(let i = 0; i < 2; i++) {
       let card = sleeve.shift();
       setSleeve([...sleeve]);
@@ -38,6 +46,9 @@ function App() {
       let dealerCard = sleeve.shift();
       setSleeve([...sleeve]);
       setDealerHand(prevDealerHand => [...prevDealerHand, dealerCard]);
+    }
+    if(playerScore === 21) {
+      setBlackjack(true);
     }
   };
 
@@ -77,6 +88,9 @@ function App() {
       })
     }
     setPlayerScore(score)
+    if(playerScore > 21) {
+      setPlayerBusted(true)
+    }
   }, [playerHand, playerScore])
 
 // find total score for Delaer, acounts for aces also
@@ -103,6 +117,9 @@ function App() {
       })
     }
     setDealerScore(score)
+    if(dealerScore > 21) {
+      setDealerBusted(true)
+    }
   }, [dealerHand, dealerScore])
 
 // handles dealer's turn
@@ -122,7 +139,17 @@ useEffect(() => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isDealerTurn, dealerScore])
 
+// end of round outcomes, not robust yet
   useEffect(() => {
+    if(blackjack) {
+      console.log("player got BlackJAck!!!")
+    }
+    if(playerBusted) {
+      console.log("player busted!")
+    }
+    if(dealerBusted) {
+      console.log("dealer BUsted!")
+    }
     if(isRoundOver) {
       if(playerScore > dealerScore) {
         console.log('player wins')
@@ -165,6 +192,10 @@ useEffect(() => {
       <p>Dealer</p>
       {cardDisplay(dealerHand)}
       Score: {dealerScore}
+
+      {playerBusted && <p>Player has busted</p>}
+      {blackjack && <p>Player has BLACKJACK!</p>}
+      {dealerBusted && <p>dealer has busted</p>}
     </div>
   );
 }
