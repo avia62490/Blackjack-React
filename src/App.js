@@ -48,10 +48,6 @@ function App() {
       setSleeve([...sleeve]);
       setDealerHand(prevDealerHand => [...prevDealerHand, dealerCard]);
     }
-    // Not calling blackjack for some reason, calls it round after getting blackjack
-    if(playerScore === 21) {
-      setBlackjack(true);
-    }
   };
 
   // use card component to for displaying 'cards' on page, pass in sleeve, playerHand, or 
@@ -90,8 +86,11 @@ function App() {
       })
     }
     setPlayerScore(score)
+    // this has resolved blackjack status issue not being called in correct round ---- GOOD!!
     if(playerScore > 21) {
       setPlayerBusted(true)
+    }else if(playerHand.length === 2 && playerScore === 21) {
+      setBlackjack(true)
     }
   }, [playerHand, playerScore])
 
