@@ -26,18 +26,19 @@ function App() {
       setSleeve(Deck);
     }
     }, [sleeve.length]);
-
-  // Initial dealing, 2 cards for Player and Dealer
+    
+    // Initial dealing, 2 cards for Player and Dealer
   function dealCards() {
-    console.log("dealing cards");
-    //Currently does not reset busted states after re-dealing, have to redeal twice to revert to flase states
     setIsDealerTurn(false);
     setIsRoundOver(false);
+    setPlayerScore(0)
+    setDealerScore(0)
     setPlayerHand([]);
     setDealerHand([]);
     setPlayerBusted(false);
     setDealerBusted(false);
     setBlackjack(false);
+    console.log("dealing cards");
 
     for(let i = 0; i < 2; i++) {
       let card = sleeve.shift();
@@ -47,6 +48,7 @@ function App() {
       setSleeve([...sleeve]);
       setDealerHand(prevDealerHand => [...prevDealerHand, dealerCard]);
     }
+    // Not calling blackjack for some reason, calls it round after getting blackjack
     if(playerScore === 21) {
       setBlackjack(true);
     }
