@@ -1,6 +1,7 @@
 import './App.css';
 import Deck from './Deck';
 import Card from './Card'
+import Result from './Result'
 import { useState, useEffect } from 'react';
 
 function App() {
@@ -178,25 +179,30 @@ useEffect(() => {
 
   return (
     <div className="App">
+      <div className='sleeve'>
       <p>Deck</p>
-      {cardDisplay(sleeve)}
-      <br></br>
-      <button onClick={dealCards}>Deal</button>
-      <p>PLayer</p>
-      {cardDisplay(playerHand)}
-      <br></br>
-      Score: {playerScore}
-      <br></br>
-      <button onClick={playerHit}>Hit</button>
-      <button onClick={playerStay}>Stay</button>
+        {cardDisplay(sleeve)}
+      </div>
+      <div>
+        <button onClick={dealCards}>Deal</button>
+        <p>PLayer</p>
+        {cardDisplay(playerHand)}
+        <br></br>
+        Score: {playerScore}
+        <br></br>
+        <button onClick={playerHit}>Hit</button>
+        <button onClick={playerStay}>Stay</button>
 
-      <p>Dealer</p>
-      {cardDisplay(dealerHand)}
-      Score: {dealerScore}
+        <p>Dealer</p>
+        {cardDisplay(dealerHand)}
+        Score: {dealerScore}
 
-      {playerBusted && <p>Player has busted</p>}
-      {blackjack && <p>Player has BLACKJACK!</p>}
-      {dealerBusted && <p>dealer has busted</p>}
+        <Result 
+          isPlayerBusted={playerBusted}
+          isBlackjack={blackjack}
+          isDealerBusted={dealerBusted}
+          />
+      </div>
     </div>
   );
 }
