@@ -90,8 +90,10 @@ function App() {
     // this has resolved blackjack status issue not being called in correct round ---- GOOD!!
     if(playerScore > 21) {
       setPlayerBusted(true)
+      setIsRoundOver(true)
     }else if(playerHand.length === 2 && playerScore === 21) {
       setBlackjack(true)
+      setIsRoundOver(true)
     }
   }, [playerHand, playerScore])
 
@@ -121,6 +123,7 @@ function App() {
     setDealerScore(score)
     if(dealerScore > 21) {
       setDealerBusted(true)
+      setIsRoundOver(true)
     }
   }, [dealerHand, dealerScore])
 
@@ -143,17 +146,14 @@ useEffect(() => {
 
 // end of round outcomes, not robust yet
   useEffect(() => {
-    if(blackjack) {
-      console.log("player got BlackJAck!!!")
-    }
-    if(playerBusted) {
-      console.log("player busted!")
-    }
-    if(dealerBusted) {
-      console.log("dealer BUsted!")
-    }
     if(isRoundOver) {
-      if(playerScore > dealerScore) {
+      if(playerBusted) {
+        console.log("player busted!")
+      } else if(dealerBusted) {
+        console.log("dealer BUsted!")
+      } else if(blackjack) {
+        console.log("player got BlackJAck!!!")
+      } else if(playerScore > dealerScore) {
         console.log('player wins')
       } else if(playerScore === dealerScore) {
         console.log('push')
@@ -190,8 +190,8 @@ useEffect(() => {
         <br></br>
         Score: {playerScore}
         <br></br>
-        <button onClick={playerHit}>Hit</button>
-        <button onClick={playerStay}>Stay</button>
+        {!isRoundOver && !isDealerTurn && <button onClick={playerHit}>Hit</button>}
+        {!isRoundOver && !isDealerTurn && <button onClick={playerStay}>Stay</button>}
 
         <p>Dealer</p>
         {cardDisplay(dealerHand)}
