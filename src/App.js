@@ -2,6 +2,7 @@ import './App.css';
 import Deck from './Deck';
 import Card from './Card'
 import Result from './Result'
+import Player from './Player';
 import { useState, useEffect } from 'react';
 
 function App() {
@@ -127,10 +128,7 @@ function App() {
     }
   }, [dealerHand, dealerScore])
 
-// handles dealer's turn
-// *************************************************
-// RETURN HERE
-// *************************************************
+// DEALER'S TURN
 useEffect(() => {
     if(isDealerTurn && dealerScore < 17) {
       console.log('dealer hits')
@@ -144,7 +142,7 @@ useEffect(() => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isDealerTurn, dealerScore])
 
-// end of round outcomes, not robust yet
+// END OF ROUND SCENARIOS
   useEffect(() => {
     if(isRoundOver) {
       if(playerBusted) {
@@ -169,21 +167,21 @@ useEffect(() => {
     let card = sleeve.shift();
     setSleeve([...sleeve]);
     setPlayerHand(prevPlayerHand => [...prevPlayerHand, card])
-    console.log(playerHand)
   }
 
   function playerStay() {
     console.log("player stays")
     setIsDealerTurn(true);
   }
-
+// DISPLAY ********************************************************
   return (
     <div className="App">
       <div className='sleeve'>
-      <p>Deck</p>
+        <p>Deck</p>
         {cardDisplay(sleeve)}
       </div>
       <div>
+        <Player />
         <button onClick={dealCards}>Deal</button>
         <p>PLayer</p>
         {cardDisplay(playerHand)}
