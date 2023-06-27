@@ -5,12 +5,21 @@ import Result from './Result'
 import Player from './Player';
 import { useState, useEffect } from 'react';
 
+// *****************************************************************
+// *****************************************************************
+// Right now player component takes in either playerHand or dealerHand
+// from App, each component can calcualte the score but I need to
+// find a way to differentiate between player and dealer (not just
+// with strings) and alter the game logic to make things work again
+// *****************************************************************
+// *****************************************************************
+
 function App() {
   const [sleeve, setSleeve] = useState([]);
   const [playerHand, setPlayerHand] = useState([]);
   const [dealerHand, setDealerHand] = useState([]);
-  const [playerScore, setPlayerScore] = useState(0);
-  const [dealerScore, setDealerScore] = useState(0);
+  // const [playerScore, setPlayerScore] = useState(0);
+  // const [dealerScore, setDealerScore] = useState(0);
   const [isDealerTurn, setIsDealerTurn] = useState(false);
   const [isRoundOver, setIsRoundOver] = useState(false);
   const [blackjack, setBlackjack] = useState(false)
@@ -33,15 +42,15 @@ function App() {
   function dealCards() {
     setIsDealerTurn(false);
     setIsRoundOver(false);
-    setPlayerScore(0)
-    setDealerScore(0)
+    // setPlayerScore(0)
+    // setDealerScore(0)
     setPlayerHand([]);
     setDealerHand([]);
     setPlayerBusted(false);
     setDealerBusted(false);
     setBlackjack(false);
     console.log("dealing cards");
-
+// *********ATTEMPTING TO PASS CARDS TO PLAYER COMPONENT********
     for(let i = 0; i < 2; i++) {
       let card = sleeve.shift();
       setSleeve([...sleeve]);
@@ -50,6 +59,7 @@ function App() {
       setSleeve([...sleeve]);
       setDealerHand(prevDealerHand => [...prevDealerHand, dealerCard]);
     }
+
   };
 
   // use card component to for displaying 'cards' on page, pass in sleeve, playerHand, or 
@@ -65,101 +75,101 @@ function App() {
   }
 
 // find total score for Player, accounts for aces being worth 1 or 11
-  useEffect(() => {
-    const deferAces = [];
-    let score = 0;
-    const faceCard = /^(Jack|Queen|King)$/;
-    playerHand.forEach(card => {
-      if(card.rank === "Ace") {
-        deferAces.push('Ace');
-      } else if(faceCard.test(card.rank)) {
-        score += 10
-      } else {
-        score += card.rank
-      }
-    })
-    if(deferAces) {
-      deferAces.forEach(ace => {
-        if(score < 11) {
-          score += 11
-        }else{
-          score += 1
-        }
-      })
-    }
-    setPlayerScore(score)
-    // this has resolved blackjack status issue not being called in correct round ---- GOOD!!
-    if(playerScore > 21) {
-      setPlayerBusted(true)
-      setIsRoundOver(true)
-    }else if(playerHand.length === 2 && playerScore === 21) {
-      setBlackjack(true)
-      setIsRoundOver(true)
-    }
-  }, [playerHand, playerScore])
+  // useEffect(() => {
+  //   const deferAces = [];
+  //   let score = 0;
+  //   const faceCard = /^(Jack|Queen|King)$/;
+  //   playerHand.forEach(card => {
+  //     if(card.rank === "Ace") {
+  //       deferAces.push('Ace');
+  //     } else if(faceCard.test(card.rank)) {
+  //       score += 10
+  //     } else {
+  //       score += card.rank
+  //     }
+  //   })
+  //   if(deferAces) {
+  //     deferAces.forEach(ace => {
+  //       if(score < 11) {
+  //         score += 11
+  //       }else{
+  //         score += 1
+  //       }
+  //     })
+  //   }
+  //   setPlayerScore(score)
+  //   // this has resolved blackjack status issue not being called in correct round ---- GOOD!!
+  //   if(playerScore > 21) {
+  //     setPlayerBusted(true)
+  //     setIsRoundOver(true)
+  //   }else if(playerHand.length === 2 && playerScore === 21) {
+  //     setBlackjack(true)
+  //     setIsRoundOver(true)
+  //   }
+  // }, [playerHand, playerScore])
 
 // find total score for Delaer, acounts for aces also
-  useEffect(() => {
-    const deferAces = [];
-    let score = 0;
-    const faceCard = /^(Jack|Queen|King)$/;
-    dealerHand.forEach(card => {
-      if(card.rank === "Ace") {
-        deferAces.push('Ace');
-      } else if(faceCard.test(card.rank)) {
-        score += 10
-      } else {
-        score += card.rank
-      }
-    })
-    if(deferAces) {
-      deferAces.forEach(ace => {
-        if(score < 11) {
-          score += 11
-        }else{
-          score += 1
-        }
-      })
-    }
-    setDealerScore(score)
-    if(dealerScore > 21) {
-      setDealerBusted(true)
-      setIsRoundOver(true)
-    }
-  }, [dealerHand, dealerScore])
+  // useEffect(() => {
+  //   const deferAces = [];
+  //   let score = 0;
+  //   const faceCard = /^(Jack|Queen|King)$/;
+  //   dealerHand.forEach(card => {
+  //     if(card.rank === "Ace") {
+  //       deferAces.push('Ace');
+  //     } else if(faceCard.test(card.rank)) {
+  //       score += 10
+  //     } else {
+  //       score += card.rank
+  //     }
+  //   })
+  //   if(deferAces) {
+  //     deferAces.forEach(ace => {
+  //       if(score < 11) {
+  //         score += 11
+  //       }else{
+  //         score += 1
+  //       }
+  //     })
+  //   }
+  //   setDealerScore(score)
+  //   if(dealerScore > 21) {
+  //     setDealerBusted(true)
+  //     setIsRoundOver(true)
+  //   }
+  // }, [dealerHand, dealerScore])
 
 // DEALER'S TURN
-useEffect(() => {
-    if(isDealerTurn && dealerScore < 17) {
-      console.log('dealer hits')
-      let card = sleeve.shift();
-      setSleeve([...sleeve]);
-      setDealerHand(prevDealerHand => [...prevDealerHand, card])
-    } else if(isDealerTurn && dealerScore <= 21) {
-      console.log('dealer stays')
-      setIsRoundOver(true);
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isDealerTurn, dealerScore])
+// useEffect(() => {
+//     if(isDealerTurn && dealerScore < 17) {
+//       console.log('dealer hits')
+//       let card = sleeve.shift();
+//       setSleeve([...sleeve]);
+//       setDealerHand(prevDealerHand => [...prevDealerHand, card])
+//     } else if(isDealerTurn && dealerScore <= 21) {
+//       console.log('dealer stays')
+//       setIsRoundOver(true);
+//     }
+//   // eslint-disable-next-line react-hooks/exhaustive-deps
+//   }, [isDealerTurn, dealerScore])
 
 // END OF ROUND SCENARIOS
-  useEffect(() => {
-    if(isRoundOver) {
-      if(playerBusted) {
-        console.log("player busted!")
-      } else if(dealerBusted) {
-        console.log("dealer BUsted!")
-      } else if(blackjack) {
-        console.log("player got BlackJAck!!!")
-      } else if(playerScore > dealerScore) {
-        console.log('player wins')
-      } else if(playerScore === dealerScore) {
-        console.log('push')
-      } else if(playerScore < dealerScore) {
-        console.log('dealer wins')
-      }
-    }
-  })
+  // useEffect(() => {
+  //   if(isRoundOver) {
+  //     if(playerBusted) {
+  //       console.log("player busted!")
+  //     } else if(dealerBusted) {
+  //       console.log("dealer BUsted!")
+  //     } else if(blackjack) {
+  //       console.log("player got BlackJAck!!!")
+  //     } else if(playerScore > dealerScore) {
+  //       console.log('player wins')
+  //     } else if(playerScore === dealerScore) {
+  //       console.log('push')
+  //     } else if(playerScore < dealerScore) {
+  //       console.log('dealer wins')
+  //     }
+  //   }
+  // })
 
   // Player hits, gets a card from sleeve
   function playerHit() {
@@ -182,20 +192,17 @@ useEffect(() => {
       </div>
       <div>
         <Player 
-          designation="Dealer"
+          designation="DEALER"
+          hand={dealerHand}
         />
-        {cardDisplay(dealerHand)}
-        Score: {dealerScore}
-        <Player 
-          designation="Player"
-        />
+        <br></br>
         <button onClick={dealCards}>Deal</button>
-        {cardDisplay(playerHand)}
-        <br></br>
-        Score: {playerScore}
-        <br></br>
         {!isRoundOver && !isDealerTurn && <button onClick={playerHit}>Hit</button>}
         {!isRoundOver && !isDealerTurn && <button onClick={playerStay}>Stay</button>}
+        <Player 
+          designation="PLAYER"
+          hand={playerHand}
+        />
 
 
         <Result 
