@@ -61,8 +61,8 @@ function App() {
         rank={card.rank}
         suit={card.suit} />
       )})
-      return display
-    }
+    return display
+  }
 
 // find total score for Player, accounts for aces being worth 1 or 11
   useEffect(() => {
@@ -181,9 +181,15 @@ useEffect(() => {
         {cardDisplay(sleeve)}
       </div>
       <div>
-        <Player />
+        <Player 
+          designation="Dealer"
+        />
+        {cardDisplay(dealerHand)}
+        Score: {dealerScore}
+        <Player 
+          designation="Player"
+        />
         <button onClick={dealCards}>Deal</button>
-        <p>PLayer</p>
         {cardDisplay(playerHand)}
         <br></br>
         Score: {playerScore}
@@ -191,15 +197,12 @@ useEffect(() => {
         {!isRoundOver && !isDealerTurn && <button onClick={playerHit}>Hit</button>}
         {!isRoundOver && !isDealerTurn && <button onClick={playerStay}>Stay</button>}
 
-        <p>Dealer</p>
-        {cardDisplay(dealerHand)}
-        Score: {dealerScore}
 
         <Result 
           isPlayerBusted={playerBusted}
           isBlackjack={blackjack}
           isDealerBusted={dealerBusted}
-          />
+        />
       </div>
     </div>
   );
