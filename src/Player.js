@@ -53,6 +53,10 @@ export default function Player(props) {
   return(
     <div>
       <p>{props.designation}</p>
+      {/* Buttons only show for the user, not dealer ---- Good
+      No functionality yet other than console.log */}
+      {props.designation !== "DEALER" && <button onClick={props.playerHit}>Hit dfgnsrf</button>}
+      {props.designation !== "DEALER" && <button onClick={props.playerStay}>Stay dfgnsrf</button>}
       {cardDisplay(playerHand)}
       <p>The score is: {playerScore}</p>
     </div>
