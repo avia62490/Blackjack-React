@@ -17,7 +17,8 @@ import { useState, useEffect } from 'react';
 function App() {
   const [sleeve, setSleeve] = useState([]);
   const [playerHand, setPlayerHand] = useState([]);
-  const [dealerHand, setDealerHand] = useState([]);
+  // const [dealerHand, setDealerHand] = useState([]);
+  const [dealtCards, setDealtCards] = useState([]);
   // const [playerScore, setPlayerScore] = useState(0);
   // const [dealerScore, setDealerScore] = useState(0);
   const [isDealerTurn, setIsDealerTurn] = useState(false);
@@ -42,34 +43,36 @@ function App() {
   function dealCards() {
     setIsDealerTurn(false);
     setIsRoundOver(false);
+    // setDealtCards([])
     // setPlayerScore(0)
     // setDealerScore(0)
     setPlayerHand([]);
-    setDealerHand([]);
+    // setDealerHand([]);
     setPlayerBusted(false);
     setDealerBusted(false);
     setBlackjack(false);
     console.log("dealing cards");
 // *********ATTEMPTING TO PASS CARDS TO PLAYER COMPONENT********
-    for(let i = 0; i < 2; i++) {
-      let card = sleeve.shift();
-      setSleeve([...sleeve]);
-      setPlayerHand(prevPlayerHand => [...prevPlayerHand, card])
-      let dealerCard = sleeve.shift();
-      setSleeve([...sleeve]);
-      setDealerHand(prevDealerHand => [...prevDealerHand, dealerCard]);
-    }
-
+    // for(let i = 0; i < 2; i++) {
+    //   let card = sleeve.shift();
+    //   setSleeve([...sleeve]);
+    //   setPlayerHand(prevPlayerHand => [...prevPlayerHand, card])
+    //   let dealerCard = sleeve.shift();
+    //   setSleeve([...sleeve]);
+    //   setDealerHand(prevDealerHand => [...prevDealerHand, dealerCard]);
+    // }
+    setDealtCards(sleeve.splice(0, 4))
   };
 
-  // use card component to for displaying 'cards' on page, pass in sleeve, playerHand, or 
-  // dealerHand as argument, takes up space on page but won't need to later on
+  // CARD DISPLAY (this is just for the sleeve now, this is also in Player component)
   function cardDisplay(setOfCards) {
-    const display = setOfCards.map(card => {
+    const display = setOfCards.map((card, index) => {
       return (
         <Card
-        rank={card.rank}
-        suit={card.suit} />
+          key={index}
+          rank={card.rank}
+          suit={card.suit} 
+        />
       )})
     return display
   }
@@ -191,9 +194,10 @@ function App() {
         {cardDisplay(sleeve)}
       </div>
       <div>
+        {/* Need to find a way to cycle how cards are dealt to each player, this is just a stop-gap with .slice method */}
         <Player 
           designation="DEALER"
-          hand={dealerHand}
+          hand={dealtCards.slice(0, 2)}
         />
         <br></br>
         <button onClick={dealCards}>Deal</button>
@@ -201,7 +205,7 @@ function App() {
         {!isRoundOver && !isDealerTurn && <button onClick={playerStay}>Stay</button>}
         <Player 
           designation="PLAYER"
-          hand={playerHand}
+          hand={dealtCards.slice(2)}
         />
 
 

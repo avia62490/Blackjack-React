@@ -1,27 +1,34 @@
 import { useState, useEffect } from "react";
 import Card from "./Card";
-import Deck from "./Deck"
 
 export default function Player(props) {
-  const [playerHand, setPlayerHand] = useState([]);
+  const [playerHand, setPlayerHand] = useState(props.hand);
   const [playerScore, setPlayerScore] = useState(0);
 
   function cardDisplay(setOfCards) {
-    const display = setOfCards.map(card => {
+    const display = setOfCards.map((card, index) => {
       return (
         <Card
-        rank={card.rank}
-        suit={card.suit} />
+          key={index}
+          rank={card.rank}
+          suit={card.suit} 
+        />
       )
     })
     return display
   }
 
+  // Updates the state of playerHand to match what is passed down through props
+  useEffect(() => {
+    setPlayerHand(props.hand)
+  }, [props.hand])
+
+  // Calcualtes score for the hand
   useEffect(() => {
     const deferAces = [];
     let score = 0;
     const faceCard = /^(Jack|Queen|King)$/;
-    props.hand.forEach(card => {
+    playerHand.forEach(card => {
       if(card.rank === "Ace") {
         deferAces.push('Ace');
       } else if(faceCard.test(card.rank)) {
@@ -40,19 +47,13 @@ export default function Player(props) {
       })
     }
     setPlayerScore(score)
-    // if(playerScore > 21) {
-    //   setPlayerBusted(true)
-    //   setIsRoundOver(true)
-    // }else if(playerHand.length === 2 && playerScore === 21) {
-    //   setBlackjack(true)
-    //   setIsRoundOver(true)
-    // }
-  }, [props.hand])
+  }, [playerHand])
 
+  // DISPLAY ******************************
   return(
     <div>
       <p>{props.designation}</p>
-      {cardDisplay(props.hand)}
+      {cardDisplay(playerHand)}
       <p>The score is: {playerScore}</p>
     </div>
   )
