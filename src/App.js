@@ -41,7 +41,7 @@ function App() {
     setSleeve([...sleeve])
   };
 
-  // CARD DISPLAY (this is just for the sleeve now, this is also in Player component)
+  // Card Display (this is just for the sleeve now, this is also in Player component)
   function cardDisplay(setOfCards) {
     const display = setOfCards.map((card, index) => {
       return (
@@ -53,10 +53,23 @@ function App() {
       )})
     return display
   }
+// WORKING TO MAKE PLAYER FUNCTION TO DISPLAY PLAYER COMPONENT, PROPS ARE PASSED THROUGH AS FUNCTION PARAMETERS
+  const player = (id, designation) => {
+    return (
+      <Player 
+        key={id}
+        designation={designation}
+        hand={[{rank: 'Ace', suit: 'Hearts'}, {rank: 'King', suit: 'Hearts'}]}
+        playerHit={() => playerHit(id)}
+        playerStay={() => playerStay()}
+      />
+    )
+  }
 
   // Player hits, gets a card from sleeve
-  function playerHit() {
+  function playerHit(id) {
     console.log('player hits')
+    console.log(id)
   }
 
   function playerStay() {
@@ -78,13 +91,14 @@ function App() {
           hand={dealtCards.slice(0, 2)}
         />
         <br></br>
-        <Player
+        {/* <Player
           key="1"
           designation="PLAYER"
           hand={dealtCards.slice(2)}
-          playerHit={() => playerHit()}
+          playerHit={() => playerHit("1")}
           playerStay={() => playerStay()}
-        />
+        /> */}
+        {player(1, "Player")}
 
 
         <Result 
