@@ -55,7 +55,7 @@ function App() {
   }
 // WORKING TO MAKE PLAYER FUNCTION TO DISPLAY PLAYER COMPONENT, PROPS ARE PASSED THROUGH AS FUNCTION PARAMETERS
 
-  const player = (id, designation, cards) => {
+  const player = (id, designation, cards, sleeve) => {
     return (
       <Player 
         key={id}
@@ -63,6 +63,7 @@ function App() {
         // handleHit={() => handleHit(id, cards)}
         // handleStay={() => handleStay()}
         playerHand={cards}
+        sleeveAccess={sleeve}
       />
     )
   }
@@ -88,10 +89,10 @@ function App() {
         <button onClick={dealCards}>Deal</button>
         {/* Need to find a way to cycle how cards are dealt to each player, this is just a stop-gap with .slice method */}
         
-        {player(2, "DEALER", dealtCards.slice(0, 2))}
+        {player(2, "DEALER", dealtCards.slice(0, 2), sleeve)}
         <br></br>
         
-        {player(1, "Player", dealtCards.slice(2))}
+        {player(1, "Player", dealtCards.slice(2), sleeve)}
 
 
         <Result 
