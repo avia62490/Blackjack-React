@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import Card from "./Card";
 
-export default function Player(props) {
-  const [playerHand, setPlayerHand] = useState(props.hand);
+export default function Player({key, designation, playerHand}) {
+  const [hand, setHand] = useState(playerHand);
   const [playerScore, setPlayerScore] = useState(0);
+  const faceCard = /^(Jack|Queen|King)$/;
 
   function cardDisplay(setOfCards) {
     const display = setOfCards.map((card, index) => {
@@ -20,45 +21,52 @@ export default function Player(props) {
 
   // Updates the state of playerHand to match what is passed down through props
   useEffect(() => {
-    setPlayerHand(props.hand)
-  }, [props.hand])
+    setHand(playerHand)
+  }, [playerHand])
 
-  // Calcualtes score for the hand
+  const calculateCardValue = (card) => {
+    return faceCard.test(card.rank) ? 10 : card.rank
+  }
+
+  // CALCULATE SCORE FOR CURRENT HAND
   useEffect(() => {
     const deferAces = [];
     let score = 0;
-    const faceCard = /^(Jack|Queen|King)$/;
-    playerHand.forEach(card => {
-      if(card.rank === "Ace") {
-        deferAces.push('Ace');
-      } else if(faceCard.test(card.rank)) {
-        score += 10
-      } else {
-        score += card.rank
-      }
+    hand.forEach(card => {
+      card.rank === "Ace" ? deferAces.push('Ace') : score += calculateCardValue(card)
     })
-    if(deferAces) {
-      deferAces.forEach(ace => {
-        if(score < 11) {
-          score += 11
-        }else{
-          score += 1
-        }
-      })
-    }
+    // auto adjusts value of aces in hand
+    deferAces.forEach(ace => {
+      score < 11 ? score += 11 : score += 1
+    })
+    
     setPlayerScore(score)
-  }, [playerHand])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hand])
+
+  function playerHit() {
+    console.log('player hits')
+    hand.push({rank: 'Ace', suit: 'Hearts'})
+    setHand([...hand])
+    console.log(hand)
+  }
+
+  function playerStay() {
+    console.log("player stays")
+  }
 
   // DISPLAY ******************************
   return(
     <div>
-      <p>{props.designation}</p>
+      <p>{designation}</p>
       {/* Buttons only show for the user, not dealer ---- Good
       No functionality yet other than console.log */}
-      {props.designation !== "DEALER" && <button onClick={props.playerHit}>Hit dfgnsrf</button>}
-      {props.designation !== "DEALER" && <button onClick={props.playerStay}>Stay dfgnsrf</button>}
-      {cardDisplay(playerHand)}
+      {/* {designation !== "DEALER" && <button onClick={playerHit}>Hit</button>} */}
+       <button onClick={playerHit}>Hit</button>
+      {designation !== "DEALER" && <button onClick={playerStay}>Stay</button>}
+      {cardDisplay(hand)}
       <p>The score is: {playerScore}</p>
     </div>
   )
 }
+// playerHand, designation, handleHit, handleStay

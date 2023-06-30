@@ -54,27 +54,29 @@ function App() {
     return display
   }
 // WORKING TO MAKE PLAYER FUNCTION TO DISPLAY PLAYER COMPONENT, PROPS ARE PASSED THROUGH AS FUNCTION PARAMETERS
-  const player = (id, designation) => {
+
+  const player = (id, designation, cards) => {
     return (
       <Player 
         key={id}
         designation={designation}
-        hand={[{rank: 'Ace', suit: 'Hearts'}, {rank: 'King', suit: 'Hearts'}]}
-        playerHit={() => playerHit(id)}
-        playerStay={() => playerStay()}
+        // handleHit={() => handleHit(id, cards)}
+        // handleStay={() => handleStay()}
+        playerHand={cards}
       />
     )
   }
 
   // Player hits, gets a card from sleeve
-  function playerHit(id) {
-    console.log('player hits')
-    console.log(id)
-  }
+  // function handleHit(id, hand) {
+  //   console.log('player hits', id)
+  //   hand.push(sleeve.shift())
+  //   console.log(hand)
+  // }
 
-  function playerStay() {
-    console.log("player stays")
-  }
+  // function handleStay() {
+  //   console.log("player stays")
+  // }
 // DISPLAY ********************************************************
   return (
     <div className="App">
@@ -85,20 +87,11 @@ function App() {
       <div>
         <button onClick={dealCards}>Deal</button>
         {/* Need to find a way to cycle how cards are dealt to each player, this is just a stop-gap with .slice method */}
-        <Player 
-          key="2"
-          designation="DEALER"
-          hand={dealtCards.slice(0, 2)}
-        />
+        
+        {player(2, "DEALER", dealtCards.slice(0, 2))}
         <br></br>
-        {/* <Player
-          key="1"
-          designation="PLAYER"
-          hand={dealtCards.slice(2)}
-          playerHit={() => playerHit("1")}
-          playerStay={() => playerStay()}
-        /> */}
-        {player(1, "Player")}
+        
+        {player(1, "Player", dealtCards.slice(2))}
 
 
         <Result 
@@ -112,3 +105,9 @@ function App() {
 }
 
 export default App;
+
+
+// parent level App: sleeve, setSleeve
+// pass down sleeve, setSleeve prop to player component
+// handleHhit , HandleSaty functions go in player component
+// turn, setTurn state at parent level
