@@ -3,25 +3,23 @@ import Deck from './Deck';
 import Card from './Card'
 import Result from './Result'
 import Player from './Player';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 // *****************************************************************
 // *****************************************************************
-// Right now player component takes in either playerHand or dealerHand
-// from App, each component can calcualte the score but I need to
-// find a way to differentiate between player and dealer (not just
-// with strings) and alter the game logic to make things work again
+// USEREFS--- could possibly cycle through and perform hit function for each player in order to deal cards, refer to notes. Player hit function is working well now (it calls drawCard from parent and updates individual hand state)
 // *****************************************************************
 // *****************************************************************
 
 function App() {
   const [sleeve, setSleeve] = useState(Deck);
-  
-  const playerComponents = [
+  const playerRefs = useRef([]);
+  const [playerComponents, setPlayerComponents] = useState( [
     { id: 3, name: 'DEALER' },
     { id: 1, name: 'Player 1' },
     { id: 2, name: 'Player 2' }
-  ]
+  ]);
+
   // Works fine for now but slowly loses cards each time it's restocked
   useEffect(() => {
     if(sleeve.length <= 3) {
@@ -34,6 +32,13 @@ function App() {
     console.log(id, 'player hits')
     setSleeve([...sleeve])
     return drawnCard
+  }
+  
+  // THIS DOES NOT WORK, GOING TO TRY USEREF TO CALL PLAYER FUNVTION
+  function dealCards() {
+    playerComponents.forEach(player => {
+      player.handleHit()
+    })
   }
 
   // Card Display (this is just for the sleeve now, this is also in Player component)
@@ -69,7 +74,7 @@ function App() {
         {cardDisplay(sleeve)}
       </div>
       <div>
-        {/* <button onClick={dealCards}>Deal</button> */}
+        <button onClick={dealCards}>Deal</button>
         <button onClick={drawCard}>Draw Card</button>
         {playerArray}
 
