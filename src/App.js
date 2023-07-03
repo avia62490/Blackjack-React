@@ -15,25 +15,28 @@ import { useState, useEffect } from 'react';
 // *****************************************************************
 
 function App() {
-  const [sleeve, setSleeve] = useState([]);
+  const [sleeve, setSleeve] = useState(Deck);
   const [dealtCards, setDealtCards] = useState([]);
   // const [isDealerTurn, setIsDealerTurn] = useState(false);
   // const [isRoundOver, setIsRoundOver] = useState(false);
-  
-
-  // import deck component and set the sleeve to a randomly shuffled set of cards
-  useEffect(() => {
-    setSleeve(Deck);
-    }, []);
+  const playerComponents = [
+    { id: 3, name: 'Dealer' },
+    { id: 1, name: 'Player 1' },
+    { id: 2, name: 'Player 2' }
+  ]
 
   // Works fine for now but slowly loses cards each time it's restocked
   useEffect(() => {
     if(sleeve.length <= 3) {
       setSleeve(Deck);
     }
-    }, [sleeve.length]);
-    
-    // Initial dealing, 2 cards for Player and Dealer
+  }, [sleeve.length])
+
+  function drawCard() {
+    let drawnCard = sleeve.shift()
+    setSleeve([...sleeve])
+  }
+  // Initial dealing, 2 cards for Player and Dealer
   function dealCards() {
     // setIsRoundOver(false);
     console.log("dealing cards");
@@ -53,20 +56,31 @@ function App() {
       )})
     return display
   }
-// WORKING TO MAKE PLAYER FUNCTION TO DISPLAY PLAYER COMPONENT, PROPS ARE PASSED THROUGH AS FUNCTION PARAMETERS
+  // WORKING TO MAKE PLAYER FUNCTION TO DISPLAY PLAYER COMPONENT, PROPS ARE PASSED THROUGH AS FUNCTION PARAMETERS
 
-  const player = (id, designation, cards, sleeve) => {
-    return (
+  const playerArray = playerComponents.map(player => {
+    return(
       <Player 
-        key={id}
-        designation={designation}
-        // handleHit={() => handleHit(id, cards)}
-        // handleStay={() => handleStay()}
-        playerHand={cards}
-        sleeveAccess={sleeve}
+        key={player.id}
+        designation={player.name}
+        playerHand={[{rank: 'Ace', suit: 'Hearts'}, {rank: 'King', suit: 'Hearts'}]}
+
       />
+
     )
-  }
+  })
+
+  // const player = (id, designation, cards) => {
+  //   return (
+  //     <Player 
+  //       key={id}
+  //       designation={designation}
+  //       // handleHit={() => handleHit(id, cards)}
+  //       // handleStay={() => handleStay()}
+  //       playerHand={cards}
+  //     />
+  //   )
+  // }
 
   // Player hits, gets a card from sleeve
   // function handleHit(id, hand) {
@@ -87,12 +101,14 @@ function App() {
       </div>
       <div>
         <button onClick={dealCards}>Deal</button>
+        <button onClick={drawCard}>Draw Card</button>
+        {playerArray}
         {/* Need to find a way to cycle how cards are dealt to each player, this is just a stop-gap with .slice method */}
         
-        {player(2, "DEALER", dealtCards.slice(0, 2), sleeve)}
+        {/* {player(2, "DEALER", dealtCards.slice(0, 2))} */}
         <br></br>
         
-        {player(1, "Player", dealtCards.slice(2), sleeve)}
+        {/* {player(1, "Player", dealtCards.slice(2))} */}
 
 
         <Result 

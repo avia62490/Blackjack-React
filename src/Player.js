@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
 import Card from "./Card";
 
-export default function Player({designation, playerHand, sleeveAccess}) {
+export default function Player({designation, playerHand}) {
   const [hand, setHand] = useState(playerHand);
   const [score, setScore] = useState(0);
-  const [sleeve, setSleeve] = useState(sleeveAccess)
   const faceCard = /^(Jack|Queen|King)$/;
 
   function cardDisplay(setOfCards) {
@@ -52,8 +51,7 @@ export default function Player({designation, playerHand, sleeveAccess}) {
 // *******************************************************************
   function playerHit() {
     console.log('player hits')
-    console.log(sleeve.shift())
-    setSleeve([...sleeve])
+    
     hand.push({rank: 'Ace', suit: 'Hearts'})
     setHand([...hand])
     // console.log(hand)
