@@ -16,15 +16,12 @@ import { useState, useEffect } from 'react';
 
 function App() {
   const [sleeve, setSleeve] = useState(Deck);
-  const [dealtCards, setDealtCards] = useState([]);
-  // const [isDealerTurn, setIsDealerTurn] = useState(false);
-  // const [isRoundOver, setIsRoundOver] = useState(false);
+  
   const playerComponents = [
-    { id: 3, name: 'Dealer' },
+    { id: 3, name: 'DEALER' },
     { id: 1, name: 'Player 1' },
     { id: 2, name: 'Player 2' }
   ]
-
   // Works fine for now but slowly loses cards each time it's restocked
   useEffect(() => {
     if(sleeve.length <= 3) {
@@ -32,17 +29,12 @@ function App() {
     }
   }, [sleeve.length])
 
-  function drawCard() {
+  function drawCard(id) {
     let drawnCard = sleeve.shift()
+    console.log(id, 'player hits')
     setSleeve([...sleeve])
+    return drawnCard
   }
-  // Initial dealing, 2 cards for Player and Dealer
-  function dealCards() {
-    // setIsRoundOver(false);
-    console.log("dealing cards");
-    setDealtCards(sleeve.splice(0, 4))
-    setSleeve([...sleeve])
-  };
 
   // Card Display (this is just for the sleeve now, this is also in Player component)
   function cardDisplay(setOfCards) {
@@ -63,35 +55,12 @@ function App() {
       <Player 
         key={player.id}
         designation={player.name}
-        playerHand={[{rank: 'Ace', suit: 'Hearts'}, {rank: 'King', suit: 'Hearts'}]}
-
+        playerHand={[]}
+        handleHit={() => drawCard(player.id)}
       />
-
     )
   })
 
-  // const player = (id, designation, cards) => {
-  //   return (
-  //     <Player 
-  //       key={id}
-  //       designation={designation}
-  //       // handleHit={() => handleHit(id, cards)}
-  //       // handleStay={() => handleStay()}
-  //       playerHand={cards}
-  //     />
-  //   )
-  // }
-
-  // Player hits, gets a card from sleeve
-  // function handleHit(id, hand) {
-  //   console.log('player hits', id)
-  //   hand.push(sleeve.shift())
-  //   console.log(hand)
-  // }
-
-  // function handleStay() {
-  //   console.log("player stays")
-  // }
 // DISPLAY ********************************************************
   return (
     <div className="App">
@@ -100,16 +69,9 @@ function App() {
         {cardDisplay(sleeve)}
       </div>
       <div>
-        <button onClick={dealCards}>Deal</button>
+        {/* <button onClick={dealCards}>Deal</button> */}
         <button onClick={drawCard}>Draw Card</button>
         {playerArray}
-        {/* Need to find a way to cycle how cards are dealt to each player, this is just a stop-gap with .slice method */}
-        
-        {/* {player(2, "DEALER", dealtCards.slice(0, 2))} */}
-        <br></br>
-        
-        {/* {player(1, "Player", dealtCards.slice(2))} */}
-
 
         <Result 
           // isPlayerBusted={playerBusted}

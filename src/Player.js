@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Card from "./Card";
 
-export default function Player({designation, playerHand}) {
+export default function Player({designation, playerHand, handleHit}) {
   const [hand, setHand] = useState(playerHand);
   const [score, setScore] = useState(0);
   const faceCard = /^(Jack|Queen|King)$/;
@@ -22,7 +22,7 @@ export default function Player({designation, playerHand}) {
   // Updates the state of playerHand to match what is passed down through props
   useEffect(() => {
     setHand(playerHand)
-  }, [playerHand])
+  }, [])
 
   const calculateCardValue = (card) => {
     return faceCard.test(card.rank) ? 10 : card.rank
@@ -50,10 +50,9 @@ export default function Player({designation, playerHand}) {
 // *******************************************************************
 // *******************************************************************
   function playerHit() {
-    console.log('player hits')
-    
-    hand.push({rank: 'Ace', suit: 'Hearts'})
-    setHand([...hand])
+    let card = handleHit()
+    console.log(card)
+    setHand([...hand, card])
     // console.log(hand)
   }
 
@@ -67,8 +66,7 @@ export default function Player({designation, playerHand}) {
       <p>{designation}</p>
       {/* Buttons only show for the user, not dealer ---- Good
       No functionality yet other than console.log */}
-      {/* {designation !== "DEALER" && <button onClick={playerHit}>Hit</button>} */}
-       <button onClick={playerHit}>Hit</button>
+      {designation !== "DEALER" && <button onClick={playerHit}>Hit</button>}
       {designation !== "DEALER" && <button onClick={playerStay}>Stay</button>}
       {cardDisplay(hand)}
       <p>The score is: {score}</p>
