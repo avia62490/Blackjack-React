@@ -14,11 +14,11 @@ import { useState, useEffect, useRef } from 'react';
 function App() {
   const [sleeve, setSleeve] = useState(Deck);
   const playerRefs = useRef([]);
-  const [playerComponents, setPlayerComponents] = useState( [
+  const playerComponents = [
     { id: 3, name: 'DEALER' },
     { id: 1, name: 'Player 1' },
     { id: 2, name: 'Player 2' }
-  ]);
+  ]
 
   // Works fine for now but slowly loses cards each time it's restocked
   useEffect(() => {
@@ -34,11 +34,8 @@ function App() {
     return drawnCard
   }
   
-  // THIS DOES NOT WORK, GOING TO TRY USEREF TO CALL PLAYER FUNVTION
   function dealCards() {
-    playerComponents.forEach(player => {
-      player.handleHit()
-    })
+    console.log(sleeve)
   }
 
   // Card Display (this is just for the sleeve now, this is also in Player component)
@@ -53,14 +50,12 @@ function App() {
       )})
     return display
   }
-  // WORKING TO MAKE PLAYER FUNCTION TO DISPLAY PLAYER COMPONENT, PROPS ARE PASSED THROUGH AS FUNCTION PARAMETERS
 
   const playerArray = playerComponents.map(player => {
     return(
       <Player 
         key={player.id}
         designation={player.name}
-        playerHand={[]}
         handleHit={() => drawCard(player.id)}
       />
     )

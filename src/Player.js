@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import Card from "./Card";
 
-export default function Player({designation, playerHand, handleHit}) {
-  const [hand, setHand] = useState(playerHand);
+export default function Player({designation, handleHit}) {
+  const [hand, setHand] = useState([]);
   const [score, setScore] = useState(0);
   const faceCard = /^(Jack|Queen|King)$/;
 
@@ -18,11 +18,6 @@ export default function Player({designation, playerHand, handleHit}) {
     })
     return display
   }
-
-  // Updates the state of playerHand to match what is passed down through props
-  useEffect(() => {
-    setHand(playerHand)
-  }, [])
 
   const calculateCardValue = (card) => {
     return faceCard.test(card.rank) ? 10 : card.rank
@@ -43,17 +38,10 @@ export default function Player({designation, playerHand, handleHit}) {
     setScore(score)
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hand])
-// *******************************************************************
-// *******************************************************************
-// ----HERE----- Need to figure out a way to pass sleeve from App
-// and also have the Hit function here update the sleeve in App
-// *******************************************************************
-// *******************************************************************
+
   function playerHit() {
     let card = handleHit()
-    console.log(card)
     setHand([...hand, card])
-    // console.log(hand)
   }
 
   function playerStay() {
@@ -64,8 +52,6 @@ export default function Player({designation, playerHand, handleHit}) {
   return(
     <div>
       <p>{designation}</p>
-      {/* Buttons only show for the user, not dealer ---- Good
-      No functionality yet other than console.log */}
       {designation !== "DEALER" && <button onClick={playerHit}>Hit</button>}
       {designation !== "DEALER" && <button onClick={playerStay}>Stay</button>}
       {cardDisplay(hand)}
