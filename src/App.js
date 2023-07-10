@@ -7,11 +7,13 @@ import { useState, useEffect } from 'react';
 
 function App() {
   const [sleeve, setSleeve] = useState(Deck);
+
   const playerComponents = [
     { name: 'DEALER' },
     { name: 'Player 1' },
     { name: 'Player 2' }
   ]
+
   const getInitialHands = () => {
     const object = {}
     playerComponents.forEach( component => {
@@ -19,6 +21,7 @@ function App() {
     })
     return object
   }
+  
   const [hands, setHands] = useState(getInitialHands())
   
   // Works fine for now but slowly loses cards each time it's restocked
@@ -29,9 +32,31 @@ function App() {
   }, [sleeve.length])
   
   function dealCards() {
-    console.log(sleeve)
-    sleeve.splice(0, 4)
-    setSleeve([...sleeve])
+    // for (const [key, value] of Object.entries(hands["Player 1"])) {
+    //   console.log(`${key}: ${value}`)
+    // }
+    // console.log(hands)
+    // hands['Player 1'].forEach(card => {
+    //   console.log(card)
+    // })
+    // hands['Player 1'].push({rank: 'Ace', suit: 'Hearts'})
+    // setHands({...hands})
+
+    // playerComponents.forEach(component => {
+    //   hands[component].push({rank: 'Ace', suit: 'Hearts'})
+    //   setHands({...hands})
+    // })
+    // console.log(hands['Player 1'])
+    // hands['Player 1'].push({rank: 'Ace', suit: 'Hearts'})
+    // setHands({...hands})
+    for (let key in hands) {
+      const card = sleeve.shift()
+      setSleeve([...sleeve])
+      hands[key].push(card)
+      setHands({...hands})
+    }
+    console.log(hands)
+    
   }
 
   // Card Display (this is just for the sleeve now, this is also in Player component)
