@@ -44,7 +44,7 @@ export default function Player({designation, hands, setHands, sleeve, setSleeve}
     
     setScore(score)
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hands[designation]])
+  }, [hands])
 
   function playerStay() {
     console.log("player stays")

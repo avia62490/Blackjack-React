@@ -30,33 +30,22 @@ function App() {
       setSleeve(Deck);
     }
   }, [sleeve.length])
-  
-  function dealCards() {
-    // for (const [key, value] of Object.entries(hands["Player 1"])) {
-    //   console.log(`${key}: ${value}`)
-    // }
-    // console.log(hands)
-    // hands['Player 1'].forEach(card => {
-    //   console.log(card)
-    // })
-    // hands['Player 1'].push({rank: 'Ace', suit: 'Hearts'})
-    // setHands({...hands})
 
-    // playerComponents.forEach(component => {
-    //   hands[component].push({rank: 'Ace', suit: 'Hearts'})
-    //   setHands({...hands})
-    // })
-    // console.log(hands['Player 1'])
-    // hands['Player 1'].push({rank: 'Ace', suit: 'Hearts'})
-    // setHands({...hands})
-    for (let key in hands) {
-      const card = sleeve.shift()
-      setSleeve([...sleeve])
-      hands[key].push(card)
-      setHands({...hands})
+  function clearHands() {
+    setHands(getInitialHands());
+  }
+  
+  // WON'T CLEAR HANDS ON ITS OWN BETWEEN DEALS --- NEED TO FIX
+  function dealCards() {
+    setHands(getInitialHands())
+    for (let i = 0; i < 2; i++) {
+      for (let key in hands) {
+        const card = sleeve.shift();
+        setSleeve([...sleeve]);
+        hands[key].push(card);
+        setHands({...hands});
+      }
     }
-    console.log(hands)
-    
   }
 
   // Card Display (this is just for the sleeve now, this is also in Player component)
@@ -94,6 +83,7 @@ function App() {
       </div>
       <div>
         <button onClick={dealCards}>Deal</button>
+        <button onClick={clearHands}>Clear</button>
         {/* <button onClick={drawCard}>Draw Card</button> */}
         {playerArray}
 
