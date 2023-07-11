@@ -1,7 +1,6 @@
 import './App.css';
 import Deck from './Deck';
 import Card from './Card'
-import Result from './Result'
 import Player from './Player';
 import { useState, useEffect } from 'react';
 
@@ -31,19 +30,15 @@ function App() {
     }
   }, [sleeve.length])
 
-  function clearHands() {
-    setHands(getInitialHands());
-  }
-  
-  // WON'T CLEAR HANDS ON ITS OWN BETWEEN DEALS --- NEED TO FIX
+  //DEAL CARDS FOR NEW ROUND -- WORKS LIKE IT SHOULD!
   function dealCards() {
-    setHands(getInitialHands())
+    const updatedHands = getInitialHands()
     for (let i = 0; i < 2; i++) {
       for (let key in hands) {
         const card = sleeve.shift();
         setSleeve([...sleeve]);
-        hands[key].push(card);
-        setHands({...hands});
+        updatedHands[key].push(card);
+        setHands({...updatedHands});
       }
     }
   }
@@ -83,15 +78,7 @@ function App() {
       </div>
       <div>
         <button onClick={dealCards}>Deal</button>
-        <button onClick={clearHands}>Clear</button>
-        {/* <button onClick={drawCard}>Draw Card</button> */}
         {playerArray}
-
-        <Result 
-          // isPlayerBusted={playerBusted}
-          // isBlackjack={blackjack}
-          // isDealerBusted={dealerBusted}
-        />
       </div>
     </div>
   );
