@@ -1,11 +1,13 @@
 import './App.css';
+import lodash from 'lodash'
 import Deck from './Deck';
 import Card from './Card'
 import Player from './Player';
 import { useState, useEffect } from 'react';
 
 function App() {
-  const [sleeve, setSleeve] = useState(Deck);
+  const shuffledSleeve = lodash.shuffle(Deck);
+  const [sleeve, setSleeve] = useState(shuffledSleeve);
 
   const playerComponents = [
     { name: 'DEALER' },
@@ -23,12 +25,17 @@ function App() {
   
   const [hands, setHands] = useState(getInitialHands())
   
-  // Works fine for now but slowly loses cards each time it's restocked
   useEffect(() => {
-    if(sleeve.length <= 3) {
-      setSleeve(Deck);
+    // const newSleeve = shuffledSleeve
+    if(sleeve.length < 6) {
+      setSleeve(shuffledSleeve);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sleeve.length])
+
+  function logSleeve() {
+    console.log(sleeve)
+  }
 
   //DEAL CARDS FOR NEW ROUND -- WORKS LIKE IT SHOULD!
   function dealCards() {
@@ -78,6 +85,7 @@ function App() {
       </div>
       <div>
         <button onClick={dealCards}>Deal</button>
+        <button onClick={logSleeve}>Log Sleeve</button>
         {playerArray}
       </div>
     </div>

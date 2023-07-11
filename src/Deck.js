@@ -1,4 +1,4 @@
-import lodash from 'lodash'
+// import lodash from 'lodash'
 
 // restructured deck as array of objects, will use rank property to determine score later, 
 // Does not show up on page display as an array of objects
@@ -19,6 +19,5 @@ const deck = [
 ];
 // const sleeve = [...deck, ...deck, ...deck];
 const sleeve = deck ;
-const shuffledSleeve = lodash.shuffle(sleeve);
 
-export default shuffledSleeve
+export default sleeve
