@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import Card from "./Card";
 
-export default function Player({designation, hands, setHands, sleeve, setSleeve}) {
+export default function Player({activePlayer, designation, hands, setHands, sleeve, setSleeve, setTurn}) {
   // const [hand, setHand] = useState([]);
   const [score, setScore] = useState(0);
   const faceCard = /^(Jack|Queen|King)$/;
+  const isActive = activePlayer['name'] === designation
 
   function cardDisplay(setOfCards) {
     const display = setOfCards.map((card, index) => {
@@ -48,14 +49,16 @@ export default function Player({designation, hands, setHands, sleeve, setSleeve}
 
   function playerStay() {
     console.log("player stays")
+    setTurn(prevTurn => prevTurn + 1)
   }
 
   // DISPLAY ******************************
   return(
     <div>
       <p>{designation}</p>
-      {designation !== "DEALER" && <button onClick={playerHit}>Hit</button>}
-      {designation !== "DEALER" && <button onClick={playerStay}>Stay</button>}
+      {isActive && <p>Active here</p>}
+      {designation !== "DEALER" && isActive && <button onClick={playerHit}>Hit</button>}
+      {designation !== "DEALER" && isActive && <button onClick={playerStay}>Stay</button>}
       {cardDisplay(hands[designation])}
       <p>The score is: {score}</p>
     </div>

@@ -7,14 +7,13 @@ import { useState, useEffect } from 'react';
 
 function App() {
   const shuffledSleeve = lodash.shuffle(Deck);
-  const [sleeve, setSleeve] = useState(shuffledSleeve);
-
+  
   const playerComponents = [
-    { name: 'DEALER' },
     { name: 'Player 1' },
-    { name: 'Player 2' }
+    { name: 'Player 2' },
+    { name: 'DEALER' }
   ]
-
+  
   const getInitialHands = () => {
     const object = {}
     playerComponents.forEach( component => {
@@ -23,18 +22,23 @@ function App() {
     return object
   }
   
+  const [sleeve, setSleeve] = useState(shuffledSleeve);
   const [hands, setHands] = useState(getInitialHands())
+  // ----- WORKING ON SETTING TURNS ------
+  const [turn, setTurn] = useState(0)
+  let activePlayer = playerComponents[turn]
   
+  // No longer bleeds cards between reshuffles, will have to adjust value if adding more players
   useEffect(() => {
-    // const newSleeve = shuffledSleeve
     if(sleeve.length < 6) {
       setSleeve(shuffledSleeve);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sleeve.length])
 
+  // Keeping this here for now just for reference
   function logSleeve() {
-    console.log(sleeve)
+    console.log(activePlayer['name'])
   }
 
   //DEAL CARDS FOR NEW ROUND -- WORKS LIKE IT SHOULD!
@@ -51,7 +55,7 @@ function App() {
   }
 
   // Card Display (this is just for the sleeve now, this is also in Player component)
-  function cardDisplay(setOfCards) {
+  const cardDisplay = (setOfCards) => {
     const display = setOfCards.map((card, index) => {
       return (
         <Card
@@ -62,7 +66,8 @@ function App() {
       )})
     return display
   }
-
+  
+  // Returns player components as they should, with props
   const playerArray = playerComponents.map(player => {
     return(
       <Player 
@@ -70,13 +75,16 @@ function App() {
         designation={player.name}
         hands={hands}
         setHands={setHands}
+        activePlayer={activePlayer}
         sleeve={sleeve}
         setSleeve={setSleeve}
+        setTurn={setTurn}
       />
     )
   })
 
-// DISPLAY ********************************************************
+// *********************** DISPLAY **********************************
+// *********************** DISPLAY **********************************
   return (
     <div className="App">
       <div className='sleeve'>
@@ -94,11 +102,8 @@ function App() {
 
 export default App;
 
-
-// parent level App: sleeve, setSleeve
-// pass down sleeve, setSleeve prop to player component
-// handleHhit , HandleSaty functions go in player component
 // turn, setTurn state at parent level
+// HandleSaty functions go in player component
 
 // Goals 06Jul23
 // Deal function
