@@ -6,6 +6,8 @@ export default function Player({activePlayer, designation, hands, setHands, slee
   const [score, setScore] = useState(0);
   const faceCard = /^(Jack|Queen|King)$/;
   const isActive = activePlayer['name'] === designation
+  // Having issue where blackjack status contiues into next round after dealing, have to deal twice to remove status
+  const hasBlackjack = hands[designation].length === 2 && score === 21
 
   function cardDisplay(setOfCards) {
     const display = setOfCards.map((card, index) => {
@@ -46,6 +48,31 @@ export default function Player({activePlayer, designation, hands, setHands, slee
     setScore(score)
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hands])
+
+  // Detect blackjack or Bust status for non-dealer players
+  useEffect(() => {
+    if(isActive && designation !== 'DEALER') {
+      if(hasBlackjack) {
+        console.log(designation, "BLACKJACK")
+        playerStay()
+      } else if(score > 21) {
+        console.log(designation, "Busts")
+        playerStay()
+      }
+    }
+  })
+
+  useEffect(() => {
+    if(isActive && designation === 'DEALER') {
+      if(score < 17) {
+        playerHit()
+      } else if(score >= 17 && score <=21) {
+        console.log("Dealer stays")
+      } else if(score > 21) {
+        console.log("DEALER BUSTS!!")
+      }
+    }
+  })
 
   function playerStay() {
     console.log("player stays")
