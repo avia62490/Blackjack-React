@@ -55,8 +55,7 @@ export default function Player({activePlayer, designation, hands, setHands, slee
   // DISPLAY ******************************
   return(
     <div>
-      <p>{designation}</p>
-      {isActive && <p>Active here</p>}
+      <p style={{ fontWeight: isActive ? 'bold' : 'normal'}}>{designation}</p>
       {designation !== "DEALER" && isActive && <button onClick={playerHit}>Hit</button>}
       {designation !== "DEALER" && isActive && <button onClick={playerStay}>Stay</button>}
       {cardDisplay(hands[designation])}

@@ -44,6 +44,7 @@ function App() {
   //DEAL CARDS FOR NEW ROUND -- WORKS LIKE IT SHOULD!
   function dealCards() {
     const updatedHands = getInitialHands()
+    setTurn(0)
     for (let i = 0; i < 2; i++) {
       for (let key in hands) {
         const card = sleeve.shift();
@@ -70,16 +71,19 @@ function App() {
   // Returns player components as they should, with props
   const playerArray = playerComponents.map(player => {
     return(
-      <Player 
-        key={player.name}
-        designation={player.name}
-        hands={hands}
-        setHands={setHands}
-        activePlayer={activePlayer}
-        sleeve={sleeve}
-        setSleeve={setSleeve}
-        setTurn={setTurn}
-      />
+      <>
+        <Player 
+          key={player.name}
+          designation={player.name}
+          hands={hands}
+          setHands={setHands}
+          activePlayer={activePlayer}
+          sleeve={sleeve}
+          setSleeve={setSleeve}
+          setTurn={setTurn}
+        />
+        <br></br>
+      </>
     )
   })
 
